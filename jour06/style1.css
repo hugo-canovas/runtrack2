@@ -1,0 +1,11 @@
+body{
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    background-color: aquamarine;
+}
+
+select{
+    font-size: 2em;
+}
+
