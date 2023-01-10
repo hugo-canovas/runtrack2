@@ -8,11 +8,11 @@
             }
         }
 
-    if($d == 2){
-        echo $i.' est un nombre premier</br>';
-    }
+        if($d == 2){
+            echo $i.' est un nombre premier</br>';
+        }
     
-}
+    }
     
 
 ?>
