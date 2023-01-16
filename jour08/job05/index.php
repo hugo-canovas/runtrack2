@@ -34,9 +34,9 @@
                 <form method='post' action='index.php'>
 <?php               
                     for($ligne = 0; $ligne < 3; $ligne++){
-                        echo'<tr>';
-                        for($colone = 0; $colone < 3; $colone++){   
-                            if(isset($_POST[$i])){
+                        echo'<tr style="width: 300px; height: 100px;">';
+                        for($colone = 0; $colone < 3; $colone++){  
+                            if(isset($_POST[$i])){ 
                                 setcookie($i, $i, time()+3600);
                                 header('Refresh:0');
                             }else if(isset($_POST['restart'])){
@@ -46,17 +46,20 @@
                             }
 
                             if(isset($_COOKIE[$i])){
+                                $case = $i;
                                 if($round == 1){
-                                    // setcookie($i, $j1, time()+3600);                     
-                                    echo '<td>X</td>';         
+                                    echo $case;
+                                    setcookie($case, $j1, time()+3600);                     
+                                    echo '<td>'.$j1.'</td>';         
                                     $round++;
                                 }else if($round == 2){
-                                    // setcookie($i, $j2, time()+3600);
-                                    echo '<td>O</td>';
+                                    setcookie($case, $j2, time()+3600);
+                                    echo $case;
+                                    echo '<td>'.$j2.'</td>';
                                     $round--;
                                 }
                             }else{
-                                 echo '<td><button type="submit" name="'.$i.'" style="width: 50px; height: 50px;"></button></td>';
+                                echo '<td style="height: 100px; width: 100px;"><button style ="height: 100%; width: 100%;" type="submit" name="'.$i.'" style="width: 50px; height: 50px;"></button></td>';
                             }
                            $i++;                 
                         }
