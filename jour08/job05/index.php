@@ -5,6 +5,10 @@
     if(!isset($_SESSION['symbol'])){
         $_SESSION['symbol'] = "X";
     }
+
+    if(!isset($_COOKIE['round'])){
+        setcookie('round', 0, time()+3600);
+    }
     
 // CONNEXION ET DECONNEXION DES JOUEURS
 
@@ -15,8 +19,16 @@
     }else if(isset($_POST['logout'])){
         unset($_SESSION['joueur_1']);
         unset($_SESSION['joueur_2']);
-        
+        session_destroy();
         header("Refresh:0");
+    }
+
+    if(isset($_POST['logout'])){
+        foreach($_COOKIE as $cookie_case => $cookie_value){
+            setcookie($cookie_case, '', time()-3600);
+            unset($_COOKIE[$cookie_case]);
+            header('Refresh:0');
+        }
     }
 
     
@@ -25,7 +37,7 @@
 <?php
 // AFFICHAGE DU TABLEAU SI JOUEUR CONNECTE SINON FORMULAIRE DE CONNEXION
 
-    if(isset($_SESSION['joueur_1']) && isset($_SESSION['joueur_2'])){ 
+    if(isset($_SESSION['joueur_1'], $_SESSION['joueur_2']) && $_SESSION['joueur_1'] != "" && $_SESSION['joueur_2'] != ""){ 
         echo "le joueur ".$_SESSION['joueur_1']." commence la partie !";
 ?>
         <form action='index.php' method='post'>
@@ -49,6 +61,7 @@
                             if(isset($_POST['restart'])){
                                 setcookie(1, '', time()-3600);
                                 setcookie($case, '', time()-3600);
+                                setcookie('round', '', time()-3600);
                                 unset($_COOKIE[$case]);
                                 header('Refresh:0');
                             }
@@ -60,13 +73,15 @@
             </table>
             <button type='submit' name='restart'>Rejouer</button>
         </form>
-<?php
+    
+        <?php
+        endGame();
     }else{ ?>
         <form action='index.php' method='post'>
-                <input type='text' name='joueur_1'>
-                <input type='text' name='joueur_2'>
-                <button type='submit' name='login'>Valider</button>
-            </form>
+            <input type='text' name='joueur_1'>
+            <input type='text' name='joueur_2'>
+            <button type='submit' name='login'>Valider</button>
+        </form>
 <?php   
     }
 ?>
@@ -85,8 +100,6 @@
         }
     }
 
-    // echo $_SESSION['symbol'];
-
     function affichage($case){
         if(isset($_COOKIE[$case])){
             echo $_COOKIE[$case];
@@ -96,13 +109,17 @@
     function disabled($case){
         if(isset($_COOKIE[$case])){
             echo 'disabled';
+        } else if(winner()){
+            echo 'disabled';
         }
     }
 
     function playerRound($case){
         if(isset($_POST[$case])){
             attributionSymbol($case);
-            
+            if(isset($_COOKIE['round'])){
+                setcookie('round', $_COOKIE['round']+1, time()+3600);
+            }
         }
     }
 
@@ -115,7 +132,80 @@
     playerRound(7);
     playerRound(8);
     playerRound(9);
+
     
+
+    function winner(){
+        if(isset($_COOKIE[1], $_COOKIE[2], $_COOKIE[3])){
+            if($_COOKIE[1] == "X" && $_COOKIE[1] == $_COOKIE[2] && $_COOKIE[1] == $_COOKIE[3]){
+                return 1;
+            }else if($_COOKIE[1] == "O" && $_COOKIE[1] == $_COOKIE[2] && $_COOKIE[1] == $_COOKIE[3]){
+                return 2;
+            }
+        }
+        if(isset($_COOKIE[4], $_COOKIE[5], $_COOKIE[6])){
+            if($_COOKIE[4] == "X" && $_COOKIE[4] == $_COOKIE[5] && $_COOKIE[4] == $_COOKIE[6]){
+                return 1;
+            }else if($_COOKIE[4] == "O" && $_COOKIE[4] == $_COOKIE[5] && $_COOKIE[4] == $_COOKIE[6]){
+                return 2;
+            }
+        }
+        if(isset($_COOKIE[7], $_COOKIE[8], $_COOKIE[9])){
+            if($_COOKIE[7] == "X" && $_COOKIE[7] == $_COOKIE[8] && $_COOKIE[7] == $_COOKIE[9]){
+                return 1;
+            }else if($_COOKIE[7] == "O" && $_COOKIE[7] == $_COOKIE[8] && $_COOKIE[7] == $_COOKIE[9]){
+                return 2;
+            }
+        }
+        if(isset($_COOKIE[1], $_COOKIE[4], $_COOKIE[7])){
+            if($_COOKIE[1] == "X" && $_COOKIE[1] == $_COOKIE[4] && $_COOKIE[1] == $_COOKIE[7]){
+                return 1;
+            }else if($_COOKIE[1] == "O" && $_COOKIE[1] == $_COOKIE[4] && $_COOKIE[1] == $_COOKIE[7]){
+                return 2;
+            }
+        }
+        if(isset($_COOKIE[2], $_COOKIE[5], $_COOKIE[8])){
+            if($_COOKIE[2] == "X" && $_COOKIE[2] == $_COOKIE[5] && $_COOKIE[2] == $_COOKIE[8]){
+                return 1;
+            }else if($_COOKIE[2] == "O" && $_COOKIE[2] == $_COOKIE[5] && $_COOKIE[2] == $_COOKIE[8]){
+                return 2;
+            }
+        }
+        if(isset($_COOKIE[3], $_COOKIE[6], $_COOKIE[9])){
+            if($_COOKIE[3] == "X" && $_COOKIE[3] == $_COOKIE[6] && $_COOKIE[3] == $_COOKIE[9]){
+                return 1;
+            }else if($_COOKIE[3] == "O" && $_COOKIE[3] == $_COOKIE[6] && $_COOKIE[3] == $_COOKIE[9]){
+                return 2;
+            }
+        }
+        if(isset($_COOKIE[1], $_COOKIE[5], $_COOKIE[9])){
+            if($_COOKIE[1] == "X" && $_COOKIE[1] == $_COOKIE[5] && $_COOKIE[1] == $_COOKIE[9]){
+                return 1;
+            }else if($_COOKIE[1] == "O" && $_COOKIE[1] == $_COOKIE[5] && $_COOKIE[1] == $_COOKIE[9]){
+                return 2;
+            }
+        }
+        if(isset($_COOKIE[3], $_COOKIE[5], $_COOKIE[7])){
+            if($_COOKIE[3] == "X" && $_COOKIE[3] == $_COOKIE[5] && $_COOKIE[3] == $_COOKIE[7]){
+                return 1;
+            }else if($_COOKIE[3] == "O" && $_COOKIE[3] == $_COOKIE[5] && $_COOKIE[3] == $_COOKIE[7]){
+                return 2;
+            }
+        }
+        
+    }
+
+    
+    function endGame(){
+        if(winner()== 1){
+            echo 'X est le gagnant';
+        }else if(winner()==2){
+            echo 'O est le gagnant';
+        }else if(isset($_COOKIE['round']) && $_COOKIE['round'] == 9){
+            echo 'Match nul';
+        }
+    }
+
 ?>
 
 
