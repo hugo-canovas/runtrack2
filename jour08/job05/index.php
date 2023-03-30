@@ -5,9 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
     <title>Morpion</title>
 </head>
-<body>
+<body class="bg-slate-800 min-h-screen">
+
+    <h1 class="text-red-900 text-7xl text-center mt-28 family">Morpion</h1>
 
 <?php 
     if(!isset($_SESSION['symbol'])){
