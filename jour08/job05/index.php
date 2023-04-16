@@ -11,7 +11,7 @@
 </head>
 <body class="bg-slate-800 min-h-screen">
 
-    <h1 class="text-red-900 text-7xl text-center mt-28 family">Morpion</h1>
+    <h1 class="text-red-900 text-7xl text-center pt-28 family">Morpion</h1>
 
 <?php 
     if(!isset($_SESSION['symbol'])){
@@ -89,11 +89,15 @@
     endGame();
     }else{ 
 ?>     
-        <form action='index.php' method='post'>
-            <input type='text' name='joueur_1'>
-            <input type='text' name='joueur_2'>
-            <button type='submit' name='login'>Valider</button>
-        </form>
+    <div class="w-full flex justify-center pt-12">
+        <div class="max-w-xl flex justify-center">
+            <form action='index.php' method='post'>
+                <input type='text' name='joueur_1'>
+                <input type='text' name='joueur_2'>
+                <button type='submit' name='login'>Valider</button>
+            </form>
+        </div>
+    </div>
 <?php 
     }
 ?>
